@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const connectDB = require('./src/confing/mongo');
+const connectDB = require('./confing/mongo');
 const router = require('./src/routers/index.router');
 
 // Cargar las variables de entorno desde el archivo .env
