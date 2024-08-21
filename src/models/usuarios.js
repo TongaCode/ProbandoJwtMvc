@@ -11,6 +11,10 @@ const usuarioSchema = mongoose.Schema({
     email: {
         type: String, require: true
     },
+
+    usuario: {
+        type: String, require: true
+    },
     password: {
         type: String, require: true
     }
