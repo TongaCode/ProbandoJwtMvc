@@ -24,9 +24,19 @@ controller.crearUsuario = async (req, res) => {
         res.status(200).json(resultado);
 
     } catch (error) {
-        res.status(400).json({error: 'no llega el mensaje'});
+        res.status(400).json({error: 'No se pudo crear el usuario'});
     };
 
+};
+
+controller.buscarUsuario = async (req, res) => {
+
+    const {email} = req.body
+    const usuario = await usuarioModel.findOne({email: email}).select('nombre email _id').lean();//.lean(), para convertirlo en un objeto js, y sea mas rapido.
+
+    res.status(200).json({usuario})
+
+    console.log(usuario);
 };
 
 

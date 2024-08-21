@@ -4,11 +4,15 @@ const controller = require('../controllers/index.controllers');
 
 router.post('/crearUsuario', controller.crearUsuario);
 
-router.get('/login', controller.index);
+router.post('/login', controller.index);
 
-router.post('/trasferencia');
+router.post('/logout');
 
-router.post('/deposito');
+router.get('protected');
+
+router.get('/buscarUsuario', controller.buscarUsuario);
+
+router.post('/trasferir')
 
 router.post('/comprarDolares');
 

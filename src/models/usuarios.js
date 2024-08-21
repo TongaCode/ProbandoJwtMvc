@@ -16,7 +16,7 @@ const usuarioSchema = mongoose.Schema({
     }
 
 
-});
+}, { versionKey: false });
 
 const usuarioModel = mongoose.model('usuarios', usuarioSchema);
 
