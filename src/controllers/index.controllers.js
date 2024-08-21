@@ -1,7 +1,7 @@
 
 const controller = {};
 const usuarioModel = require('../models/usuarios');
-const generarJwt = require('../utils/genererarJwt');
+const { generateToken, verifyToken } = require('../utils/genererarJwt');
 
 
 
@@ -19,7 +19,7 @@ controller.crearUsuario = async (req, res) => {
         });
 
         const payload = { email: user.email };
-        const token = generarJwt(payload);
+        const token = generateToken(payload);
         await user.save();
 
         // Enviar el token JWT como una cookie
@@ -57,7 +57,7 @@ controller.login = async (req, res) => {
     } else if (user.password !== password) {
         res.status(400).json('La contraseña es invalida!.');
     };
-
+    
     res.status(200).json({ user })
 
 };
