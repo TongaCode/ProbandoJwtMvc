@@ -3,6 +3,3 @@ node_modules/
 
 # Ignorar archivo de variables de entorno
 .env
-
-# .env.example
-.env.example
