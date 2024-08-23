@@ -17,17 +17,8 @@ controller.crearUsuario = async (req, res) => {
             usuario,
             password
         });
-
-        const payload = { email: user.email };
-        const token = generateToken(payload);
+        
         await user.save();
-
-        // Enviar el token JWT como una cookie
-        res.cookie('token', token, {
-            httpOnly: true,
-            secure: false, // Cambia a true si usas HTTPS en producción
-            maxAge: 24 * 60 * 60 * 1000 // 1 día
-        });
 
         res.status(200).json('Usuario creado exitosamente');
 
@@ -48,19 +39,38 @@ controller.buscarUsuario = async (req, res) => {
 };
 
 controller.login = async (req, res) => {
-    const { usuario, password } = req.body;
 
-    const user = await usuarioModel.findOne({ usuario: usuario }).select('usuario password');
+    try {
+        const { usuario, password } = req.body;
 
-    if (user.usuario !== usuario && user.password !== password) {
-        res.status(400).json('El usuario es invalido!.');
-    } else if (user.password !== password) {
-        res.status(400).json('La contraseña es invalida!.');
-    };
-    
-    res.status(200).json({ user })
+        const user = await usuarioModel.findOne({ usuario: usuario }).select('usuario password email');
+
+        if (!user) {
+            throw new Error('El usuario no existe!.');
+        };
+
+        if (user.password !== password) {
+            throw new Error('La contraseña es invalida!.');
+        };
+
+        //Genero el payload con el mail del usuario.
+        const payload = { email: user.email };
+        const token = generateToken(payload);
+
+        // Enviar el token JWT como una cookie
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: false, // Cambia a true si usas HTTPS en producción
+            maxAge: 24 * 60 * 60 * 1000 // 1 día
+        });
+
+
+
+        res.status(200).json({ message: 'bienvenido' })
+    } catch (error) {
+        return res.status(400).json({ error: error.message });
+    }
 
 };
-
 
 module.exports = controller;

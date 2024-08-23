@@ -15,7 +15,7 @@ router.post('/logout');
 
 router.get('/protected');
 
-router.post('/trasferir')
+router.post('/trasferir');
 
 router.post('/comprarDolares');
 
