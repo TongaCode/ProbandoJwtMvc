@@ -31,19 +31,21 @@ controller.crearUsuario = async (req, res) => {
 
 controller.buscarUsuario = async (req, res) => {
 
-    const { email } = req.body
+    const {email} = req.body;
 
-    if (!email) {
-        return res.status(400).json({ message: 'El email esta vacio' })
+    try {
+        const usuario = await usuarioModel.findOne({ email: email });
 
+        if (usuario === null) {
+            return res.status(200).json('El usuario no existe!')
+        }
+
+        return res.status(200).json({usuario});
+
+        
+    } catch (error) {
+        return res.status(400).json({ error: error.message });
     }
-    const usuario = await usuarioModel.findOne({ email: email })
-
-    if (usuario === null) {
-        return res.status(400).json({ error: 'el usuario no existe' })
-    }
-    
-    return res.status(200).json(usuario)
 
 };
 

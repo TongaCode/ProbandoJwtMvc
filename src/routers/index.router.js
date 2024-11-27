@@ -2,14 +2,14 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/index.controllers');
 const { verifyToken } = require('../utils/genererarJwt');
-const validarUsuario = require('../middelware/validarUsuario');
 const validarDatos = require('../middelware/validarDatos');
+const validarBuscarUsuario = require('../middelware/validarBuscarUsuario');
 
 
 
-router.post('/crearUsuario', validarDatos,  validarUsuario, controller.crearUsuario);
+router.post('/crearUsuario', validarDatos, controller.crearUsuario);
 
-router.get('/buscarUsuario', controller.buscarUsuario);
+router.get('/buscarUsuario',validarBuscarUsuario, controller.buscarUsuario);
 
 router.post('/login',controller.login);
 

@@ -1,4 +1,4 @@
-function validarDatos(req, res) {
+function validarDatos(req, res, next) {
     const { nombre, apellido, email, usuario, password } = req.body;
     const errores = [];
 
