@@ -2,10 +2,12 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/index.controllers');
 const { verifyToken } = require('../utils/genererarJwt');
+const validarUsuario = require('../middelware/validarUsuario');
+const validarDatos = require('../middelware/validarDatos');
 
 
 
-router.post('/crearUsuario', controller.crearUsuario);
+router.post('/crearUsuario', validarDatos,  validarUsuario, controller.crearUsuario);
 
 router.get('/buscarUsuario', controller.buscarUsuario);
 

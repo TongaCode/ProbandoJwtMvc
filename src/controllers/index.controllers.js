@@ -11,12 +11,6 @@ controller.crearUsuario = async (req, res) => {
 
         const { nombre, apellido, email, usuario, password } = req.body;
 
-        const buscarUsuario = await usuarioModel.findOne({ email: email }); // Comprobar si existe el usuario primero.
-
-        if (buscarUsuario) {
-            return res.status(400).json('El usuario ya existe');
-        }
-
         const user = new usuarioModel({
             nombre,
             apellido,
@@ -38,7 +32,7 @@ controller.crearUsuario = async (req, res) => {
 controller.buscarUsuario = async (req, res) => {
 
     const { email } = req.body
-    
+
     if (!email) {
         return res.status(400).json({ message: 'El email esta vacio' })
 
@@ -46,15 +40,10 @@ controller.buscarUsuario = async (req, res) => {
     const usuario = await usuarioModel.findOne({ email: email })
 
     if (usuario === null) {
-        return res.status(400).json({error: 'el usuario no existe'})
+        return res.status(400).json({ error: 'el usuario no existe' })
     }
-
     
-        
     return res.status(200).json(usuario)
-    
-
-
 
 };
 
