@@ -4,6 +4,7 @@ const controller = require('../controllers/index.controllers');
 const { verifyToken } = require('../utils/genererarJwt');
 const validarDatos = require('../middelware/validarDatos');
 const validarBuscarUsuario = require('../middelware/validarBuscarUsuario');
+const validarLogin = require('../middelware/validarLogin');
 
 
 
@@ -11,7 +12,7 @@ router.post('/crearUsuario', validarDatos, controller.crearUsuario);
 
 router.get('/buscarUsuario',validarBuscarUsuario, controller.buscarUsuario);
 
-router.post('/login',controller.login);
+router.post('/login',validarLogin, controller.login);
 
 router.post('/logout');
 
