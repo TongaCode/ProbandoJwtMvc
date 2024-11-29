@@ -50,14 +50,20 @@ controller.buscarUsuario = async (req, res) => {
 };
 
 controller.login = async (req, res) => {
+    const {usuario, password}= req.body;
+    
     try {
-
-        // Si el usuario no existe
-        if (!user) {
-            errores.push('Credenciales incorrectas' );
-        }
         // Buscar al usuario en la base de datos
         const user = await usuarioModel.findOne({ usuario }).select('usuario password email');
+        console.log(user)
+        // Si el usuario no existe
+        if (!user || user == null) {
+            return res.status(400).json('El usuario no existe');
+        }
+        
+        if (user.usuario !== usuario || user.password !== password) {
+            return res.status(400).json('Las credenciales son incorrectas');
+        }
 
         // Generar el payload con el email del usuario
         const payload = { email: user.email };
