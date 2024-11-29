@@ -5,10 +5,11 @@ const { verifyToken } = require('../utils/genererarJwt');
 const validarDatos = require('../middelware/validarDatos');
 const validarBuscarUsuario = require('../middelware/validarBuscarUsuario');
 const validarLogin = require('../middelware/validarLogin');
+const verificarEmail = require('../middelware/verificarEmail');
 
 
 
-router.post('/crearUsuario', validarDatos, controller.crearUsuario);
+router.post('/crearUsuario', validarDatos, verificarEmail, controller.crearUsuario);
 
 router.get('/buscarUsuario',validarBuscarUsuario, controller.buscarUsuario);
 

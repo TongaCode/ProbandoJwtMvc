@@ -13,7 +13,7 @@ function validarLogin(req, res, next) {
         errores.push('El campo "password" es obligatorio y debe ser un texto válido.');
     } else if (password.length < 6) {
         // Validar longitud mínima de la contraseña
-        errores.push('El campo "password" debe tener al menos 6 caracteres.');
+        errores.push('El campo password debe tener al menos 6 caracteres.');
     }
 
     // Si hay errores, retornar con un estado 400
