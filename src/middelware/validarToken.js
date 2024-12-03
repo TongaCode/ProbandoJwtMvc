@@ -13,11 +13,10 @@ function validarToken(req, res, next) {
         // Verificar el token
         const decoded = jwt.verify(token, process.env.SECRET);
 
-        // Adjuntar la información decodificada al objeto `req` para su uso posterior
+        // Adjuntar la información decodificada al objeto `req` para usarlo
+        //devuelve email para despues traer en el controlador al usuario con el email.
         req.user = decoded;
 
-        // Pasar al siguiente middleware o controlador
-        //return res.status(200).json(req.user) solo para prueba
         next();
         
     } catch (error) {

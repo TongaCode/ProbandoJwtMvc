@@ -1,6 +1,6 @@
 const usuarioModel = require("../models/usuarios");
 
-async function validarRemitenteTransferencia(req, res) {
+async function validarRemitenteTransferencia(req, res, next) {
     const monedasPermitidas = ["peso", "dolar"];
     const { numeroCuenta, moneda, monto } = req.body;
     const errores = [];
@@ -24,11 +24,6 @@ async function validarRemitenteTransferencia(req, res) {
         return res.status(400).json({ errores });
     }
 
-    const validarNumeroRemitente = await usuarioModel.findOne({numeroCuenta: numeroCuenta});
-
-    if (!validarNumeroRemitente) {
-        errores.push('El numero de cuenta no existe!.')
-    }
 
     next();
 

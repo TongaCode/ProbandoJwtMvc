@@ -19,12 +19,12 @@ const usuarioSchema = mongoose.Schema({
     password: {
         type: String, require: true
     },
-    pesos: {
+    peso: {
         type: Number, default: 0, require: true
 
     },
 
-    dolares: {
+    dolar: {
         type: Number, default: 0, require: true
 
     },
