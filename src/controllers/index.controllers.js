@@ -1,7 +1,9 @@
 const controller = {};
-const transferir = require('../service/transferirService')
+const TransferenciaService = require('../service/transferirService');
 const usuarioModel = require('../models/usuarios');
 const generarJwt = require('../utils/generarJwt');
+const UsuarioRepository = require('../repositories/usuarioRepository');
+const usuarioRepository = require('../repositories/usuarioRepository');
 
 
 
@@ -34,14 +36,10 @@ controller.buscarUsuario = async (req, res) => {
     const { email } = req.body;
 
     try {
-        const usuario = await usuarioModel.findOne({ email: email });
-
-        if (!usuario) {
-            return res.status(400).json('El usuario no existe!')
-        }
+        //LLamo al repository
+        const usuario = await UsuarioRepository.findByEmail(email);
 
         return res.status(200).json({ usuario });
-
 
     } catch (error) {
         return res.status(500).json({ error: error.message });
@@ -54,7 +52,8 @@ controller.login = async (req, res) => {
 
     try {
 
-        const user = await usuarioModel.findOne({ email: email }).select('usuario password email');
+        const user = await UsuarioRepository.findByEmail(email);
+        
 
         if (!user) {
             return res.status(400).json('El usuario no existe');
@@ -79,7 +78,7 @@ controller.login = async (req, res) => {
 
     } catch (error) {
 
-        return res.status(500).json({ error: 'Error en el servidor' });
+        return res.status(400).json({ error: error.message });
     }
 };
 
@@ -92,10 +91,12 @@ controller.protected = async (req, res) => {
 
 controller.transferir = async (req, res) => {
     try {
-        const emisorEmail = req.user.email;
+        //Guardo email del usuario logeado para posterior
+        const email = req.user.email;
         const { numeroCuenta, moneda, monto } = req.body;
+
         //Llamo al Service transferir
-        const resultado = await transferir.service(emisorEmail, numeroCuenta, moneda, monto);
+        const resultado = await TransferenciaService.transferir(email, numeroCuenta, moneda, monto);
         return res.status(200).json(resultado)
     } catch (error) {
         return res.status(400).json({ error: error.message })
