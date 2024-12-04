@@ -1,23 +1,28 @@
-const transferir = {};
-const usuarioModel = require('../models/usuarios');
-const validarFondos = require('./validarFondosService');
+const validarFondos = require('../middelware/validarFondos');
+const UsuarioRepository = require('../repositories/usuarioRepository');
 
-transferir.service = async (emisorEmail, numeroCuenta, moneda, monto) => {
-    const emisor = await usuarioModel.findOne({ email: emisorEmail })
-    const remitente = await usuarioModel.findOne({ numeroCuenta: numeroCuenta });
+class TransferenciaService {
+    async transferir(email, numeroCuenta, moneda, monto) {
+        try {
+            //Llamo al repository
+            const emisor = await UsuarioRepository.email(email);
+            const receptor = await UsuarioRepository.receptor(numeroCuenta);
+            //Middelware validar fondos
+            validarFondos(emisor, moneda, monto);
+            //Realizo la operacion
+            emisor[moneda] -= monto;
+            receptor[moneda] += monto;
+            //LLamo al repository para guardar
+            await UsuarioRepository.emisorSave(emisor);
+            await UsuarioRepository.receptorSave(receptor);
 
-    if (!remitente) throw new Error('El numero de cuenta no existe!.')
+            return { message: 'Transferencia realizada con exito!' }
 
-    //Llamo al service de verificar fondos.
-    validarFondos.service(emisor, moneda, monto);
+        } catch (error) {
+            return { error: error.message }
+        }
 
-    emisor[moneda] -= monto;
-    remitente[moneda] += monto;
-
-    await emisor.save();
-    await remitente.save();
-
-    return { message: 'Transferencia realizada!.' };
+    };
 };
 
-module.exports = transferir;
+module.exports = new TransferenciaService();
