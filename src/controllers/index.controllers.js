@@ -3,9 +3,6 @@ const TransferenciaService = require('../service/transferirService');
 const usuarioModel = require('../models/usuarios');
 const generarJwt = require('../utils/generarJwt');
 const UsuarioRepository = require('../repositories/usuarioRepository');
-const usuarioRepository = require('../repositories/usuarioRepository');
-
-
 
 controller.crearUsuario = async (req, res) => {
 
