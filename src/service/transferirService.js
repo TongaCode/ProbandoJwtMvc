@@ -5,8 +5,8 @@ class TransferenciaService {
     async transferir(email, numeroCuenta, moneda, monto) {
         try {
             //Llamo al repository
-            const emisor = await UsuarioRepository.email(email);
-            const receptor = await UsuarioRepository.receptor(numeroCuenta);
+            const emisor = await UsuarioRepository.findByEmail(email);
+            const receptor = await UsuarioRepository.findByNumeroDeCuenta(numeroCuenta);
             //Middelware validar fondos
             validarFondos(emisor, moneda, monto);
             //Realizo la operacion
