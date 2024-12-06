@@ -19,8 +19,8 @@ class UsuarioRepository {
 
     };
 
-    async emisorSave(emisor) {
-        await emisor.save();
+    async userSave(user) {
+        await user.save();
         return true;
     };
 

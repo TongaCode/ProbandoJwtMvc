@@ -3,22 +3,16 @@ const TransferenciaService = require('../service/transferirService');
 const usuarioModel = require('../models/usuarios');
 const generarJwt = require('../utils/generarJwt');
 const UsuarioRepository = require('../repositories/usuarioRepository');
+const CrearUsuarioService = require('../service/crearUsuarioService');
 
 controller.crearUsuario = async (req, res) => {
-
+    const { nombre, apellido, email, usuario, password } = req.body;
     try {
+        //LLamo al service.
+        const user = CrearUsuarioService.crear(nombre, apellido, email, usuario, password);
 
-        const { nombre, apellido, email, usuario, password } = req.body;
-
-        const user = new usuarioModel({
-            nombre,
-            apellido,
-            email,
-            usuario,
-            password
-        });
-
-        await user.save();
+        //LLamo al repository.
+        await UsuarioRepository.userSave(user);
 
         res.status(200).json('Usuario creado exitosamente');
 
@@ -50,7 +44,7 @@ controller.login = async (req, res) => {
     try {
 
         const user = await UsuarioRepository.findByEmail(email);
-        
+
 
         if (!user) {
             return res.status(400).json('El usuario no existe');
