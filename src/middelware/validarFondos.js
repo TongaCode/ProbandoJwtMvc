@@ -1,5 +1,5 @@
-function validarFondos(emisor, moneda, monto) {
-    if (emisor[moneda] < monto) throw new Error('No tienes fondos suficientes!.');
+function validarFondos(user, moneda, monto) {
+    if (user[moneda] < monto) throw new Error('No tienes fondos suficientes!.');
 
     return true;
 }

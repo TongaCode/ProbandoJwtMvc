@@ -1,9 +1,9 @@
 const controller = {};
 const TransferenciaService = require('../service/transferirService');
 const usuarioModel = require('../models/usuarios');
-const generarJwt = require('../utils/generarJwt');
 const UsuarioRepository = require('../repositories/usuarioRepository');
 const CrearUsuarioService = require('../service/crearUsuarioService');
+const LoguinUsuarioService = require('../service/loguinUsuarioService');
 
 controller.crearUsuario = async (req, res) => {
     const { nombre, apellido, email, usuario, password } = req.body;
@@ -40,35 +40,19 @@ controller.buscarUsuario = async (req, res) => {
 
 controller.login = async (req, res) => {
     const { usuario, password, email } = req.body;
-
     try {
-
+        //LLamo al repository
         const user = await UsuarioRepository.findByEmail(email);
-
-
-        if (!user) {
-            return res.status(400).json('El usuario no existe');
-        }
-
-        if (user.usuario !== usuario || user.password !== password) {
-            return res.status(400).json('Las credenciales son incorrectas');
-        }
-
-        const payload = { email: user.email };
-
-        const token = generarJwt(payload);
-
+        //LLamo al service login
+        const token = await LoguinUsuarioService.validarUsuarioPassword(user, usuario, password);
         // Enviar el token JWT como una cookie
         res.cookie('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production', // Habilitar secure en producción
             maxAge: 24 * 60 * 60 * 1000 // 1 día
         });
-
         return res.status(200).json({ message: 'Bienvenido' });
-
     } catch (error) {
-
         return res.status(400).json({ error: error.message });
     }
 };
