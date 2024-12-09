@@ -2,11 +2,11 @@ const usuarioModel = require('../models/usuarios');
 
 class UsuarioRepository {
     async findByEmail(email) {
-        const resultado = await usuarioModel.findOne({ email: email });
+        const user = await usuarioModel.findOne({ email: email });
 
-        if (!resultado) throw new Error('El usuario no existe!.');
+        if (!user) throw new Error('El usuario no existe!.');
 
-        return resultado;
+        return user;
 
     };
 

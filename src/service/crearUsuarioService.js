@@ -1,13 +1,16 @@
 const usuarioModel = require('../models/usuarios');
+const encriptarPassword = require('../utils/bcrypt')
 
 class CrearUsuarioService {
-    crear(nombre, apellido, email, usuario, password) {
+    async crear(nombre, apellido, email, usuario, password) {
+        //Encripto la password
+        const passwordEncriptada = await encriptarPassword(password)
         const user = new usuarioModel({
             nombre,
             apellido,
             email,
             usuario,
-            password
+            password: passwordEncriptada
         });
 
         return user;

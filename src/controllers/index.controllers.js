@@ -1,6 +1,6 @@
 const controller = {};
-const TransferenciaService = require('../service/transferirService');
 const usuarioModel = require('../models/usuarios');
+const TransferenciaService = require('../service/transferirService');
 const UsuarioRepository = require('../repositories/usuarioRepository');
 const CrearUsuarioService = require('../service/crearUsuarioService');
 const LoguinUsuarioService = require('../service/loguinUsuarioService');
@@ -9,17 +9,13 @@ controller.crearUsuario = async (req, res) => {
     const { nombre, apellido, email, usuario, password } = req.body;
     try {
         //LLamo al service.
-        const user = CrearUsuarioService.crear(nombre, apellido, email, usuario, password);
-
+        const user = await CrearUsuarioService.crear(nombre, apellido, email, usuario, password);
         //LLamo al repository.
         await UsuarioRepository.userSave(user);
-
         res.status(200).json('Usuario creado exitosamente');
-
     } catch (error) {
         res.status(400).json({ error: error.message });
     };
-
 };
 
 controller.buscarUsuario = async (req, res) => {
@@ -58,7 +54,6 @@ controller.login = async (req, res) => {
 };
 
 controller.protected = async (req, res) => {
-
     const { email } = req.user
     const usuario = await usuarioModel.findOne({ email: email });
     return res.status(200).json(`'${usuario.usuario}' Usted tiene acceso a la ruta protegida!.`)
