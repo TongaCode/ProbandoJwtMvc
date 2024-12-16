@@ -6,24 +6,16 @@ const validarBuscarUsuario = require('../middelware/validarBuscarUsuario');
 const validarLogin = require('../middelware/validarLogin');
 const verificarEmail = require('../middelware/verificarEmail');
 const validarToken = require('../middelware/validarToken');
+const validarCompraVenta = require('../middelware/validarCompraVenta');
 const validarRemitenteTransferencia = require('../middelware/validarRemitenteTransferencia');
-
-
-
-router.post('/crearUsuario', validarDatos, verificarEmail, controller.crearUsuario);
+const validarExtraerDeposito = require('../middelware/validarExtraccionDeposito');
 
 router.get('/buscarUsuario',validarBuscarUsuario, controller.buscarUsuario);
-
+router.post('/crearUsuario', validarDatos, verificarEmail, controller.crearUsuario);
 router.post('/login',validarLogin, controller.login);
-
-router.post('/logout');
-
 router.get('/protected',validarToken, controller.protected);
-
 router.post('/transferir',validarToken, validarRemitenteTransferencia, controller.transferir);
-
-router.post('/comprarDolares', validarToken);
-
-router.post('/venderDolares', validarToken);
-
+router.post('/compraVenta', validarToken, validarCompraVenta, controller.compraVenta);
+router.post('/extraccionDeposito', validarToken, validarExtraerDeposito, controller.extraccionDeposito);
+router.post('/logout');
 module.exports = router;

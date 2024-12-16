@@ -1,5 +1,3 @@
-const usuarioModel = require("../models/usuarios");
-
 async function validarRemitenteTransferencia(req, res, next) {
     const monedasPermitidas = ["peso", "dolar"];
     const { numeroCuenta, moneda, monto } = req.body;
@@ -21,7 +19,7 @@ async function validarRemitenteTransferencia(req, res, next) {
     }
 
     if (errores.length > 0) {
-        return res.status(400).json({ errores });
+        return res.status(400).json({ error: errores });
     }
 
 

@@ -20,12 +20,12 @@ const usuarioSchema = mongoose.Schema({
         type: String, require: true
     },
     peso: {
-        type: Number, default: 0, require: true
+        type: Number, default: 10000, require: true
 
     },
 
     dolar: {
-        type: Number, default: 0, require: true
+        type: Number, default: 10000, require: true
 
     },
     numeroCuenta: {
