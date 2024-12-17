@@ -20,7 +20,7 @@ class extraccionDepositoService {
                 return user;
             default:
                 throw new Error(`Error al realizar la operacion: ${operacion}!.`);
-        }
+        };
     };
 };
 module.exports = new extraccionDepositoService();

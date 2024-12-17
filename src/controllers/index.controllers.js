@@ -48,9 +48,22 @@ controller.login = async (req, res) => {
     }
 };
 controller.protected = async (req, res) => {
-    const { email } = req.user
-    const usuario = await usuarioModel.findOne({ email: email })
-    return res.status(200).json(`'${usuario.usuario}' Usted tiene acceso a la ruta protegida!.`)
+    try {
+        const { email } = req.user;
+        const user = await usuarioModel.findOne({ email: email });
+        return res.status(200).json({
+            message: "¡Acceso concedido a la ruta protegida!",
+            usuario: user.usuario,
+            detalles: {
+                email: user.email,
+                nombre: user.nombre,
+                peso: user.peso,
+                dolar: user.dolar
+            },
+        });
+    } catch (error) {
+        return res.status(500).json({ error: "Error del servidor", details: error.message });
+    }
 };
 controller.transferir = async (req, res) => {
     try {
@@ -87,6 +100,14 @@ controller.extraccionDeposito = async (req, res) => {
     } catch (error) {
         res.status(400).json({ erorr: error.message });
     }
+};
+controller.logout = async (req, res) => {
+    res.clearCookie('token', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        path: '/' // Debe coincidir con el path usado en res.cookie o si no use ninguno por defoult lo hace en todas
+    });
+    return res.status(200).json({ message: 'Logout exitoso' });
 };
 
 module.exports = controller;

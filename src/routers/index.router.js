@@ -17,5 +17,5 @@ router.get('/protected',validarToken, controller.protected);
 router.post('/transferir',validarToken, validarRemitenteTransferencia, controller.transferir);
 router.post('/compraVenta', validarToken, validarCompraVenta, controller.compraVenta);
 router.post('/extraccionDeposito', validarToken, validarExtraerDeposito, controller.extraccionDeposito);
-router.post('/logout');
+router.post('/logout',validarToken, controller.logout);
 module.exports = router;
