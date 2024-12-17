@@ -1,5 +1,5 @@
 const usuarioRepository = require("../repositories/usuarioRepository");
-const validarFondosCompraVenta = require('../utils/validarFondos');
+const {validarFondosCompraVenta} = require('../utils/validarFondos');
 
 class CompraVentaService {
     async compraVenta(email, operacion, moneda, monto) {
@@ -7,7 +7,7 @@ class CompraVentaService {
         const user = await usuarioRepository.findByEmail(email);
         const valorDolar = 1000; //Voy a realizar un repositori a una api externa posteriormente
         //Verifico los fondos
-        await validarFondosCompraVenta(user, operacion, moneda, monto, valorDolar);
+        validarFondosCompraVenta(user, operacion, moneda, monto, valorDolar);
         switch (operacion) {
             case 'compra':
                 user[moneda] += monto;

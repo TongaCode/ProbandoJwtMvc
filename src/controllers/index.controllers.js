@@ -84,12 +84,9 @@ controller.extraccionDeposito = async (req, res) => {
         //Llamo al service
         const user = await extracccionDepositoService.extraccionDeposito(email, operacion, moneda, monto);
         res.status(200).json(`${operacion} exitosa!, ${moneda}: ${user[moneda]}`);
-
     } catch (error) {
         res.status(400).json({ erorr: error.message });
     }
-
-
 };
 
 module.exports = controller;

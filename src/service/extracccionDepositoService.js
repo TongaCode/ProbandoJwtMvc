@@ -1,5 +1,5 @@
 const usuarioRepository = require("../repositories/usuarioRepository");
-const validarFondos = require('../utils/validarFondos');
+const {validarFondos} = require('../utils/validarFondos');
 
 class extraccionDepositoService {
     async extraccionDeposito(email, operacion, moneda, monto) {
@@ -8,7 +8,7 @@ class extraccionDepositoService {
         switch (operacion) {
             case 'extraccion':
                 //Llamo para validar fondos
-                await validarFondos(user, moneda, monto);
+                validarFondos(user, moneda, monto);
                 user[moneda] -= monto
                 //Llamo al repository user para guardar cambios usuario
                 await usuarioRepository.userSave(user);
@@ -19,7 +19,7 @@ class extraccionDepositoService {
                 await usuarioRepository.userSave(user);
                 return user;
             default:
-                throw new Error(`Error al realizar la operacion: ${operacion}, Detalles ${error.message}`);
+                throw new Error(`Error al realizar la operacion: ${operacion}!.`);
         }
     };
 };
