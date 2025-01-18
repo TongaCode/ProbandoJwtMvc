@@ -3,7 +3,7 @@ const usuarioModel = require('../models/usuarios')
 const TransferenciaService = require('../service/transferirService')
 const UsuarioRepository = require('../repositories/usuarioRepository')
 const CrearUsuarioService = require('../service/crearUsuarioService')
-const LoguinUsuarioService = require('../service/loguinUsuarioService')
+const LoginUsuarioService = require('../service/loginUsuarioService')
 const CompraVentaService = require('../service/compraVentaService');
 const extracccionDepositoService = require('../service/extracccionDepositoService')
 
@@ -35,14 +35,14 @@ controller.login = async (req, res) => {
         //LLamo al repository
         const user = await UsuarioRepository.findByEmail(email)
         //LLamo al service login
-        const token = await LoguinUsuarioService.validarUsuarioPassword(user, usuario, password)
+        const token = await LoginUsuarioService.validarUsuarioPassword(user, usuario, password)
         // Enviar el token JWT como una cookie
         res.cookie('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production', // Habilitar secure en producción
             maxAge: 24 * 60 * 60 * 1000 // 1 día
         });
-        return res.status(200).json({ message: 'Bienvenido' })
+        return res.status(200).json({ message: `Bienvenido ${user.usuario}` })
     } catch (error) {
         return res.status(400).json({ error: error.message })
     }

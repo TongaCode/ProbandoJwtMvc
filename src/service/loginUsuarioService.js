@@ -1,7 +1,7 @@
 const generarJwt = require('../utils/generarJwt');
 const bcrypt = require('bcrypt');
-class LoguinUsuarioService {
-    async validarUsuarioPassword(user, usuario, password) {
+class LoginUsuarioService {
+    async validarUsuarioPassword(user,usuario, password) {
         //Verifico usuario y password
         const validar = await bcrypt.compare(password, user.password);
         if (!validar) throw new Error ('Las credenciales son incorrectas!.');
@@ -13,4 +13,4 @@ class LoguinUsuarioService {
         return token;
     };
 };
-module.exports = new LoguinUsuarioService();
+module.exports = new LoginUsuarioService();
