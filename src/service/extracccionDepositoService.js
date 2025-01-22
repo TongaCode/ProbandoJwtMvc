@@ -1,26 +1,30 @@
-const usuarioRepository = require("../repositories/usuarioRepository");
 const {validarFondos} = require('../utils/validarFondos');
+const OperacionesService = require('./OperacionesService')
 
-class extraccionDepositoService {
-    async extraccionDeposito(email, operacion, moneda, monto) {
+class ExtraccionDepositoService extends OperacionesService {
+    constructor(UsuarioRepository, operacion){
+        super(UsuarioRepository,{operacion});
+        this.operacion = operacion;
+    };
+    async ejecutar(email, moneda, monto) {
         //Llamo al repository
-        const user = await usuarioRepository.findByEmail(email);
-        switch (operacion) {
+        const user = await this.UsuarioRepository.findByEmail(email);
+        switch (this.operacion) {
             case 'extraccion':
                 //Llamo para validar fondos
                 validarFondos(user, moneda, monto);
                 user[moneda] -= monto
                 //Llamo al repository user para guardar cambios usuario
-                await usuarioRepository.userSave(user);
+                await this.UsuarioRepository.userSave(user);
                 return user;
             case 'deposito':
                 user[moneda] += monto
                 //Llamo al repository user para guardar cambios usuario
-                await usuarioRepository.userSave(user);
+                await this.UsuarioRepository.userSave(user);
                 return user;
             default:
-                throw new Error(`Error al realizar la operacion: ${operacion}!.`);
+                throw new Error(`Error al realizar la operacion: ${this.operacion}!.`);
         };
     };
 };
-module.exports = new extraccionDepositoService();
+module.exports = ExtraccionDepositoService;

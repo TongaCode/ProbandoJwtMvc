@@ -1,20 +1,21 @@
 const controller = {}
 const usuarioModel = require('../models/usuarios')
-const TransferenciaService = require('../service/transferirService')
-const UsuarioRepository = require('../repositories/usuarioRepository')
-const CrearUsuarioService = require('../service/crearUsuarioService')
-const LoginUsuarioService = require('../service/loginUsuarioService')
-const CompraVentaService = require('../service/compraVentaService');
-const extracccionDepositoService = require('../service/extracccionDepositoService')
+const TransferenciaService = require('../service/TransferirService')
+const CrearUsuarioService = require('../service/CrearUsuarioService')
+const LoginUsuarioService = require('../service/LoginUsuarioService')
+const ExtraccionDepositoService = require('../service/ExtracccionDepositoService')
+const UsuarioRepository = require('../repositories/UsuarioRepository')
+const CompraVentaDolarService = require('../service/CompraVentaService')
+const BuscarUsuario = require('../service/BuscarUsuario')
 
 controller.crearUsuario = async (req, res) => {
     const { nombre, apellido, email, usuario, password } = req.body
     try {
-        //LLamo al service.
-        const user = await CrearUsuarioService.crear(nombre, apellido, email, usuario, password)
+        //Creo la instancia del servicio e inyecto el Repositorio.
+        const crearUsuarioService = new CrearUsuarioService(UsuarioRepository);
+        const user = await crearUsuarioService.ejecutar(nombre, apellido, email, usuario, password)
         //LLamo al repository.
-        await UsuarioRepository.userSave(user)
-        res.status(200).json('Usuario creado exitosamente')
+        res.status(200).json(`Usuario creado exitosamente, Nombre: ${user.nombre} , Apellido: ${user.apellido} , Email: ${user.email}`)
     } catch (error) {
         res.status(400).json({ error: error.message })
     };
@@ -22,9 +23,10 @@ controller.crearUsuario = async (req, res) => {
 controller.buscarUsuario = async (req, res) => {
     const { email } = req.body
     try {
-        //LLamo al repository
-        const usuario = await UsuarioRepository.findByEmail(email)
-        return res.status(200).json({ usuario })
+        //Creo la instancia del servicio e inyecto el Repositorio.
+        const buscarUsuarioService = new BuscarUsuario(UsuarioRepository);
+        const user = await buscarUsuarioService.ejecutar(email);
+        return res.status(200).json({ user })
     } catch (error) {
         return res.status(500).json({ error: error.message })
     }
@@ -68,35 +70,61 @@ controller.protected = async (req, res) => {
 controller.transferir = async (req, res) => {
     try {
         //Guardo email del usuario logeado para posterior
-        const email = req.user.email
+        const email = req.user.email;
         const { numeroCuenta, moneda, monto } = req.body;
-        //Llamo al Service transferir
-        const resultado = await TransferenciaService.transferir(email, numeroCuenta, moneda, monto)
+        //Creo la instancia del servicio e inyecto el Repositorio.
+        const transferirService = new TransferenciaService(UsuarioRepository);
+        const resultado = await transferirService.ejecutar(email, numeroCuenta, moneda, monto);
         return res.status(200).json(resultado)
     } catch (error) {
         return res.status(400).json({ error: error.message })
     }
 };
-controller.compraVenta = async (req, res) => {
+controller.compraDolar = async (req, res) => {
     try {
-        const { operacion, moneda, monto } = req.body;
+        const { monto } = req.body;
         const { email } = req.user;
-        //LLamo al service
-        const user = await CompraVentaService.compraVenta(email, operacion, moneda, monto);
-        //Llamo al repositori
-        await UsuarioRepository.userSave(user);
-        return res.status(200).json('Operacion exitosa!');
+        //Creo la instancia del servicio y paso por parametro 'compra,' e inyecto el Repositorio.
+        const comprarDolarService = new CompraVentaDolarService(UsuarioRepository, 'compra');
+        const user = await comprarDolarService.ejecutar(email, monto);
+        return res.status(200).json(`Operacion exitosa!, Dolares: ${user.dolar}`);
     } catch (error) {
         return res.status(400).json({ error: error.message })
     }
 };
-controller.extraccionDeposito = async (req, res) => {
-    const { operacion, moneda, monto } = req.body;
+controller.ventaDolar = async (req, res) => {
+    try {
+        const { monto } = req.body;
+        const { email } = req.user;
+        //Inicio la instancia del servicio, e inyecto la dependencia Repository, paso por parametro 'venta'.
+        const ventaDolarService = new CompraVentaDolarService(UsuarioRepository, 'venta');
+        const user = await ventaDolarService.ejecutar(email, monto);
+        //Llamo al repositori
+        return res.status(200).json(`Operacion exitosa!, Dolares: ${user.dolar}`);
+    } catch (error) {
+        return res.status(400).json({ error: error.message })
+    }
+};
+controller.extraccion = async (req, res) => {
+    const { moneda, monto } = req.body;
     const { email } = req.user;
     try {
-        //Llamo al service
-        const user = await extracccionDepositoService.extraccionDeposito(email, operacion, moneda, monto);
-        res.status(200).json(`${operacion} exitosa!, ${moneda}: ${user[moneda]}`);
+        //instancio el servicio inyectando el repositorio y pasando el parametro 'extraccion' como operacion.
+        const extraccionService = new ExtraccionDepositoService(UsuarioRepository, 'extraccion');
+        const user = await extraccionService.ejecutar(email, moneda, monto);
+        res.status(200).json(`Extraccion exitosa!, ${moneda}: ${user[moneda]}`);
+    } catch (error) {
+        res.status(400).json({ erorr: error.message });
+    }
+};
+controller.deposito = async (req, res) => {
+    const { moneda, monto } = req.body;
+    const { email } = req.user;
+    try {
+        //Creo la instancia del servicio y paso por parametro 'deposito,' e inyecto el Repositorio.
+        const depositoService = new ExtraccionDepositoService(UsuarioRepository, 'deposito');
+        const user = await depositoService.ejecutar(email, moneda, monto);
+        res.status(200).json(`Deposito exitoso!, ${moneda}: ${user[moneda]}`);
     } catch (error) {
         res.status(400).json({ erorr: error.message });
     }

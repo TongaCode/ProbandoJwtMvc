@@ -1,20 +1,23 @@
-const {validarFondos} = require('../utils/validarFondos');
-const UsuarioRepository = require('../repositories/usuarioRepository');
+const { validarFondos } = require('../utils/validarFondos');
+const OperacionesService = require('./OperacionesService');
 
-class TransferenciaService {
-    async transferir(email, numeroCuenta, moneda, monto) {
+class TransferirService extends OperacionesService {
+    constructor(UsuarioRepository){
+        super(UsuarioRepository);
+    };
+    async ejecutar(email, numeroCuenta, moneda, monto ) {
         try {
             //Llamo al repository
-            const user = await UsuarioRepository.findByEmail(email);
-            const receptor = await UsuarioRepository.findByNumeroDeCuenta(numeroCuenta);
+            const user = await this.UsuarioRepository.findByEmail(email);
+            const receptor = await this.UsuarioRepository.findByNumeroDeCuenta(numeroCuenta);
             //Middelware validar fondos
-            await validarFondos(user, moneda, monto);
+            validarFondos(user, moneda, monto);
             //Realizo la operacion
             user[moneda] -= monto;
             receptor[moneda] += monto;
             //LLamo al repository para guardar
-            await UsuarioRepository.userSave(user);
-            await UsuarioRepository.receptorSave(receptor);
+            await this.UsuarioRepository.userSave(user);
+            await this.UsuarioRepository.receptorSave(receptor);
 
             return { message: 'Transferencia realizada con exito!' }
 
@@ -25,4 +28,4 @@ class TransferenciaService {
     };
 };
 
-module.exports = new TransferenciaService();
+module.exports = TransferirService;
