@@ -1,16 +1,15 @@
 const controller = {}
-const usuarioModel = require('../models/usuarios')
 const TransferenciaService = require('../service/TransferirService')
 const CrearUsuarioService = require('../service/CrearUsuarioService')
 const LoginUsuarioService = require('../service/LoginUsuarioService')
 const ExtraccionDepositoService = require('../service/ExtracccionDepositoService')
 const UsuarioRepository = require('../repositories/UsuarioRepository')
 const CompraVentaDolarService = require('../service/CompraVentaService')
-const BuscarUsuario = require('../service/BuscarUsuario')
+const BuscarUsuario = require('../service/BuscarUsuarioService')
 
 controller.crearUsuario = async (req, res) => {
-    const { nombre, apellido, email, usuario, password } = req.body
     try {
+        const { nombre, apellido, email, usuario, password } = req.body
         //Creo la instancia del servicio e inyecto el Repositorio.
         const crearUsuarioService = new CrearUsuarioService(UsuarioRepository);
         const user = await crearUsuarioService.ejecutar(nombre, apellido, email, usuario, password)
@@ -21,8 +20,8 @@ controller.crearUsuario = async (req, res) => {
     };
 };
 controller.buscarUsuario = async (req, res) => {
-    const { email } = req.body
     try {
+        const { email } = req.body
         //Creo la instancia del servicio e inyecto el Repositorio.
         const buscarUsuarioService = new BuscarUsuario(UsuarioRepository);
         const user = await buscarUsuarioService.ejecutar(email);
@@ -32,19 +31,18 @@ controller.buscarUsuario = async (req, res) => {
     }
 };
 controller.login = async (req, res) => {
-    const { usuario, password, email } = req.body
     try {
-        //LLamo al repository
-        const user = await UsuarioRepository.findByEmail(email)
-        //LLamo al service login
-        const token = await LoginUsuarioService.validarUsuarioPassword(user, usuario, password)
+    const { usuario, password, email } = req.body
+        //Creo la instancia del servicio y le inyecto el repository.
+        const loginService = new LoginUsuarioService(UsuarioRepository);
+        const token = await loginService.ejecutar(usuario, password, email)
         // Enviar el token JWT como una cookie
         res.cookie('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production', // Habilitar secure en producción
             maxAge: 24 * 60 * 60 * 1000 // 1 día
         });
-        return res.status(200).json({ message: `Bienvenido ${user.usuario}` })
+        return res.status(200).json({ message: `Bienvenido ${usuario}` })
     } catch (error) {
         return res.status(400).json({ error: error.message })
     }
@@ -52,7 +50,8 @@ controller.login = async (req, res) => {
 controller.protected = async (req, res) => {
     try {
         const { email } = req.user;
-        const user = await usuarioModel.findOne({ email: email });
+        const buscarUsuarioService = new BuscarUsuario(UsuarioRepository);
+        const user = await buscarUsuarioService.ejecutar(email);
         return res.status(200).json({
             message: "¡Acceso concedido a la ruta protegida!",
             usuario: user.usuario,
@@ -106,9 +105,9 @@ controller.ventaDolar = async (req, res) => {
     }
 };
 controller.extraccion = async (req, res) => {
-    const { moneda, monto } = req.body;
-    const { email } = req.user;
     try {
+        const { moneda, monto } = req.body;
+        const { email } = req.user;
         //instancio el servicio inyectando el repositorio y pasando el parametro 'extraccion' como operacion.
         const extraccionService = new ExtraccionDepositoService(UsuarioRepository, 'extraccion');
         const user = await extraccionService.ejecutar(email, moneda, monto);
@@ -118,9 +117,9 @@ controller.extraccion = async (req, res) => {
     }
 };
 controller.deposito = async (req, res) => {
-    const { moneda, monto } = req.body;
-    const { email } = req.user;
     try {
+        const { moneda, monto } = req.body;
+        const { email } = req.user;
         //Creo la instancia del servicio y paso por parametro 'deposito,' e inyecto el Repositorio.
         const depositoService = new ExtraccionDepositoService(UsuarioRepository, 'deposito');
         const user = await depositoService.ejecutar(email, moneda, monto);

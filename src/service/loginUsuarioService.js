@@ -1,10 +1,16 @@
 const generarJwt = require('../utils/generarJwt');
+const OperacionesService = require('./OperacionesService');
 const bcrypt = require('bcrypt');
-class LoginUsuarioService {
-    async validarUsuarioPassword(user,usuario, password) {
-        //Verifico usuario y password
+
+class LoginUsuarioService extends OperacionesService {
+    constructor(UsuarioRepository) {
+        super(UsuarioRepository);
+    };
+    async ejecutar(usuario, password, email) {
+        //Llamo al repository para buscar al usuario
+        const user = await this.UsuarioRepository.findByEmail(email);
         const validar = await bcrypt.compare(password, user.password);
-        if (!validar) throw new Error ('Las credenciales son incorrectas!.');
+        if (!validar || usuario !== user.usuario) throw new Error('Las credenciales son incorrectas!.');
         //Creo el payload
         const payload = { email: user.email };
         //Genero el token
@@ -13,4 +19,4 @@ class LoginUsuarioService {
         return token;
     };
 };
-module.exports = new LoginUsuarioService();
+module.exports = LoginUsuarioService;
