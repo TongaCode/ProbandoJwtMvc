@@ -15,7 +15,6 @@ class CompraVentaDolarService extends OperacionesService {
         validarFondosCompraVenta(user, this.operacion, monto, valorDolar);
 
         switch (this.operacion) {
-
             case 'compra':
                 user.dolar += monto;
                 user.peso -= monto * valorDolar;
@@ -30,7 +29,7 @@ class CompraVentaDolarService extends OperacionesService {
 
             default:
                 throw new Error(`Error al realizar la operacion ${this.operacion}, Detalles ${error.message}`);
-        }
+        };
     };
 };
 module.exports = CompraVentaDolarService;

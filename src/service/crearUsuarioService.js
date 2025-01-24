@@ -4,11 +4,12 @@ const OperacionesService = require('./OperacionesService');
 
 class CrearUsuarioService extends OperacionesService {
     constructor(UsuarioRepository){
-        super(UsuarioRepository);
+    super(UsuarioRepository);
     };
+
     async ejecutar(nombre, apellido, email, usuario, password) {
         //Encripto la password
-        const passwordEncriptada = await encriptarPassword(password)
+        const passwordEncriptada = await encriptarPassword(password);
         const user = new usuarioModel({
             nombre,
             apellido,
@@ -17,7 +18,8 @@ class CrearUsuarioService extends OperacionesService {
             password: passwordEncriptada
         });
         
-        await this.UsuarioRepository.userSave(user)
+        await this.UsuarioRepository.userSave(user);
+
         return user;
     };
 };

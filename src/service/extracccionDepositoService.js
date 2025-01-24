@@ -1,11 +1,12 @@
 const {validarFondos} = require('../utils/validarFondos');
-const OperacionesService = require('./OperacionesService')
+const OperacionesService = require('./OperacionesService');
 
 class ExtraccionDepositoService extends OperacionesService {
     constructor(UsuarioRepository, operacion){
         super(UsuarioRepository,{operacion});
         this.operacion = operacion;
     };
+
     async ejecutar(email, moneda, monto) {
         //Llamo al repository
         const user = await this.UsuarioRepository.findByEmail(email);
@@ -18,14 +19,15 @@ class ExtraccionDepositoService extends OperacionesService {
                 user[moneda] -= monto
                 //Llamo al repository user para guardar cambios usuario
                 await this.UsuarioRepository.userSave(user);
+
                 return user;
 
             case 'deposito':
                 user[moneda] += monto
                 //Llamo al repository user para guardar cambios usuario
                 await this.UsuarioRepository.userSave(user);
+
                 return user;
-                
             default:
                 throw new Error(`Error al realizar la operacion: ${this.operacion}!.`);
         };

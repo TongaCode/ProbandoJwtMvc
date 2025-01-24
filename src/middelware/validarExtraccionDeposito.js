@@ -1,5 +1,4 @@
 function validarExtraerDeposito(req, res, next) {
-
     const { operacion, moneda, monto } = req.body;
     const operacionValida = ['extraccion', 'deposito'];
     const error = [];

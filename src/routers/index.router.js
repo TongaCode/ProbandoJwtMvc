@@ -11,13 +11,23 @@ const validarRemitenteTransferencia = require('../middelware/validarRemitenteTra
 const validarExtraerDeposito = require('../middelware/validarExtraccionDeposito');
 
 router.get('/buscarUsuario',validarBuscarUsuario, controller.buscarUsuario);
+
 router.post('/crearUsuario', validarDatos, verificarEmail, controller.crearUsuario);
+
 router.post('/login',validarLogin, controller.login);
+
 router.get('/protected',validarToken, controller.protected);
+
 router.post('/transferir',validarToken, validarRemitenteTransferencia, controller.transferir);
+
 router.post('/compraDolar', validarToken, validarCompraVenta, controller.compraDolar);
+
 router.post('/ventaDolar', validarToken, validarCompraVenta, controller.ventaDolar);
+
 router.post('/extraccion', validarToken, controller.extraccion);
+
 router.post('/deposito', validarToken, controller.deposito);
+
 router.post('/logout',validarToken, controller.logout);
+
 module.exports = router;

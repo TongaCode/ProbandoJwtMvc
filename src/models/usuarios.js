@@ -41,7 +41,7 @@ usuarioSchema.pre('save', function (next) {
 
     if (!this.numeroCuenta) {
         this.numeroCuenta = generarNumeroCuenta();
-    }
+    };
     
     next();
 });

@@ -4,9 +4,10 @@ class BuscarUsuarioService extends OperacionesService {
     constructor(UsuarioRepository) {
         super(UsuarioRepository);
     };
-    async ejecutar(email) {
 
+    async ejecutar(email) {
         const user = await this.UsuarioRepository.findByEmail(email);
+
         return user;
     };
 };

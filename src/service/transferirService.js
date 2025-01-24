@@ -7,7 +7,6 @@ class TransferirService extends OperacionesService {
     };
 
     async ejecutar(email, numeroCuenta, moneda, monto) {
-
         try {
             //Llamo al repository
             const user = await this.UsuarioRepository.findByEmail(email);
@@ -22,7 +21,6 @@ class TransferirService extends OperacionesService {
             await this.UsuarioRepository.receptorSave(receptor);
 
             return { message: 'Transferencia realizada con exito!' }
-
         } catch (error) {
             return { error: error.message }
         }
