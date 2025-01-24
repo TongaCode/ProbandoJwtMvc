@@ -5,15 +5,14 @@ const LoginUsuarioService = require('../service/LoginUsuarioService')
 const ExtraccionDepositoService = require('../service/ExtracccionDepositoService')
 const UsuarioRepository = require('../repositories/UsuarioRepository')
 const CompraVentaDolarService = require('../service/CompraVentaService')
-const BuscarUsuario = require('../service/BuscarUsuarioService')
+const BuscarUsuarioService = require('../service/BuscarUsuarioService')
 
 controller.crearUsuario = async (req, res) => {
     try {
         const { nombre, apellido, email, usuario, password } = req.body
-        //Creo la instancia del servicio e inyecto el Repositorio.
+        //Creo una instancia del servicio CrearUsuarioService y utilizando UsuarioRepository como dependencia.
         const crearUsuarioService = new CrearUsuarioService(UsuarioRepository);
         const user = await crearUsuarioService.ejecutar(nombre, apellido, email, usuario, password)
-        //LLamo al repository.
         res.status(200).json(`Usuario creado exitosamente, Nombre: ${user.nombre} , Apellido: ${user.apellido} , Email: ${user.email}`)
     } catch (error) {
         res.status(400).json({ error: error.message })
@@ -22,8 +21,8 @@ controller.crearUsuario = async (req, res) => {
 controller.buscarUsuario = async (req, res) => {
     try {
         const { email } = req.body
-        //Creo la instancia del servicio e inyecto el Repositorio.
-        const buscarUsuarioService = new BuscarUsuario(UsuarioRepository);
+        //Creo una instancia del servicio BuscarUsuarioService y utilizando UsuarioRepository como dependencia.
+        const buscarUsuarioService = new BuscarUsuarioService(UsuarioRepository);
         const user = await buscarUsuarioService.ejecutar(email);
         return res.status(200).json({ user })
     } catch (error) {
@@ -33,7 +32,7 @@ controller.buscarUsuario = async (req, res) => {
 controller.login = async (req, res) => {
     try {
     const { usuario, password, email } = req.body
-        //Creo la instancia del servicio y le inyecto el repository.
+        //Creo una instancia del servicio LoginUsuarioService y utilizando UsuarioRepository como dependencia.
         const loginService = new LoginUsuarioService(UsuarioRepository);
         const token = await loginService.ejecutar(usuario, password, email)
         // Enviar el token JWT como una cookie
@@ -50,6 +49,7 @@ controller.login = async (req, res) => {
 controller.protected = async (req, res) => {
     try {
         const { email } = req.user;
+        //Creo una instancia del servicio BuscarUsuario y utilizando UsuarioRepository como dependencia.
         const buscarUsuarioService = new BuscarUsuario(UsuarioRepository);
         const user = await buscarUsuarioService.ejecutar(email);
         return res.status(200).json({
@@ -71,7 +71,7 @@ controller.transferir = async (req, res) => {
         //Guardo email del usuario logeado para posterior
         const email = req.user.email;
         const { numeroCuenta, moneda, monto } = req.body;
-        //Creo la instancia del servicio e inyecto el Repositorio.
+        //Creo una instancia del servicio TransferenciaService y utilizando UsuarioRepository como dependencia.
         const transferirService = new TransferenciaService(UsuarioRepository);
         const resultado = await transferirService.ejecutar(email, numeroCuenta, moneda, monto);
         return res.status(200).json(resultado)
@@ -83,7 +83,7 @@ controller.compraDolar = async (req, res) => {
     try {
         const { monto } = req.body;
         const { email } = req.user;
-        //Creo la instancia del servicio y paso por parametro 'compra,' e inyecto el Repositorio.
+        //Creo una instancia del servicio CompraVentaDolarService, pasando el tipo de operación ('compra') como argumento y utilizando UsuarioRepository como dependencia.
         const comprarDolarService = new CompraVentaDolarService(UsuarioRepository, 'compra');
         const user = await comprarDolarService.ejecutar(email, monto);
         return res.status(200).json(`Operacion exitosa!, Dolares: ${user.dolar}`);
@@ -95,7 +95,7 @@ controller.ventaDolar = async (req, res) => {
     try {
         const { monto } = req.body;
         const { email } = req.user;
-        //Inicio la instancia del servicio, e inyecto la dependencia Repository, paso por parametro 'venta'.
+        //Creo una instancia del servicio CompraVentaDolarService, pasando el tipo de operación ('venta') como argumento y utilizando UsuarioRepository como dependencia.
         const ventaDolarService = new CompraVentaDolarService(UsuarioRepository, 'venta');
         const user = await ventaDolarService.ejecutar(email, monto);
         //Llamo al repositori
@@ -108,7 +108,7 @@ controller.extraccion = async (req, res) => {
     try {
         const { moneda, monto } = req.body;
         const { email } = req.user;
-        //instancio el servicio inyectando el repositorio y pasando el parametro 'extraccion' como operacion.
+        //Creo una instancia del servicio ExtraccionDepositoService, pasando el tipo de operación ('extraccion') como argumento y utilizando UsuarioRepository como dependencia..
         const extraccionService = new ExtraccionDepositoService(UsuarioRepository, 'extraccion');
         const user = await extraccionService.ejecutar(email, moneda, monto);
         res.status(200).json(`Extraccion exitosa!, ${moneda}: ${user[moneda]}`);
@@ -120,7 +120,7 @@ controller.deposito = async (req, res) => {
     try {
         const { moneda, monto } = req.body;
         const { email } = req.user;
-        //Creo la instancia del servicio y paso por parametro 'deposito,' e inyecto el Repositorio.
+        //Creo una instancia del servicio ExtraccionDepositoService, pasando el tipo de operación ('deposito') como argumento y utilizando UsuarioRepository como dependencia..
         const depositoService = new ExtraccionDepositoService(UsuarioRepository, 'deposito');
         const user = await depositoService.ejecutar(email, moneda, monto);
         res.status(200).json(`Deposito exitoso!, ${moneda}: ${user[moneda]}`);

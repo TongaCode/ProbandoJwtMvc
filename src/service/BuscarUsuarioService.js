@@ -1,6 +1,6 @@
 const OperacionesService = require('./OperacionesService');
 
-class BuscarUsuario extends OperacionesService {
+class BuscarUsuarioService extends OperacionesService {
     constructor(UsuarioRepository) {
         super(UsuarioRepository);
     };
@@ -10,4 +10,4 @@ class BuscarUsuario extends OperacionesService {
     };
 };
 
-module.exports = BuscarUsuario;
+module.exports = BuscarUsuarioService;
