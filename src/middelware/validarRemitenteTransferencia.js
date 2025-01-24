@@ -22,9 +22,7 @@ async function validarRemitenteTransferencia(req, res, next) {
         return res.status(400).json({ error: errores });
     }
 
-
     next();
-
 };
 
 module.exports = validarRemitenteTransferencia;

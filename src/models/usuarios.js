@@ -38,9 +38,11 @@ const usuarioSchema = mongoose.Schema({
 
 // Hook para asignar el número de cuenta al usuario
 usuarioSchema.pre('save', function (next) {
+
     if (!this.numeroCuenta) {
         this.numeroCuenta = generarNumeroCuenta();
     }
+    
     next();
 });
 

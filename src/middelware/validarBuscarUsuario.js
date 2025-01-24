@@ -8,7 +8,8 @@ function validarBuscarUsuario(req, res, next) {
     } else if (!/^\S+@\S+\.\S+$/.test(email)) {
         errores.push('El email no tiene un formato válido');
     }
-    if (errores.length > 0) return res.status(400).json({error: errores});
+
+    if (errores.length > 0) return res.status(400).json({ error: errores });
     next();
 };
 

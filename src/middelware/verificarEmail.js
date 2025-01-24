@@ -8,9 +8,8 @@ async function verificarEmail(req, res, next) {
     if (verificar) {
         return res.status(400).json('El email ya existe!.');
     }
-
+    
     next();
-
 };
 
 module.exports = verificarEmail;

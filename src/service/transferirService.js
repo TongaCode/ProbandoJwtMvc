@@ -2,10 +2,12 @@ const { validarFondos } = require('../utils/validarFondos');
 const OperacionesService = require('./OperacionesService');
 
 class TransferirService extends OperacionesService {
-    constructor(UsuarioRepository){
+    constructor(UsuarioRepository) {
         super(UsuarioRepository);
     };
-    async ejecutar(email, numeroCuenta, moneda, monto ) {
+
+    async ejecutar(email, numeroCuenta, moneda, monto) {
+
         try {
             //Llamo al repository
             const user = await this.UsuarioRepository.findByEmail(email);
@@ -24,7 +26,6 @@ class TransferirService extends OperacionesService {
         } catch (error) {
             return { error: error.message }
         }
-
     };
 };
 

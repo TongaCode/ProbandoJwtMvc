@@ -1,7 +1,9 @@
-function validarExtraerDeposito (req, res, next) {
-    const {operacion, moneda, monto} = req.body;
+function validarExtraerDeposito(req, res, next) {
+
+    const { operacion, moneda, monto } = req.body;
     const operacionValida = ['extraccion', 'deposito'];
     const error = [];
+
     if (!operacionValida.includes(operacion)) error.push(`La operacion debe ser "extraccion" ó "deposito", no '${operacion}.'`);
 
     //Validar moneda peso o dolar
@@ -14,7 +16,7 @@ function validarExtraerDeposito (req, res, next) {
     //Valido que los parametros no esten vacios
     if (!operacion || !moneda || monto === undefined) error.push('Los parametros no pueden estar vacio');
 
-    if (error.length > 0) return res.status(400).json({error: error});
+    if (error.length > 0) return res.status(400).json({ error: error });
 
     next();
 };

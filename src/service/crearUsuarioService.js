@@ -16,6 +16,7 @@ class CrearUsuarioService extends OperacionesService {
             usuario,
             password: passwordEncriptada
         });
+        
         await this.UsuarioRepository.userSave(user)
         return user;
     };

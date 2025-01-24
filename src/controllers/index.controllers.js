@@ -1,9 +1,9 @@
 const controller = {}
+const UsuarioRepository = require('../repositories/UsuarioRepository')
 const TransferenciaService = require('../service/TransferirService')
 const CrearUsuarioService = require('../service/CrearUsuarioService')
 const LoginUsuarioService = require('../service/LoginUsuarioService')
 const ExtraccionDepositoService = require('../service/ExtracccionDepositoService')
-const UsuarioRepository = require('../repositories/UsuarioRepository')
 const CompraVentaDolarService = require('../service/CompraVentaService')
 const BuscarUsuarioService = require('../service/BuscarUsuarioService')
 
