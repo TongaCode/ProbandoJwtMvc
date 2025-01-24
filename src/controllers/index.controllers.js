@@ -31,7 +31,7 @@ controller.buscarUsuario = async (req, res) => {
 };
 controller.login = async (req, res) => {
     try {
-    const { usuario, password, email } = req.body
+        const { usuario, password, email } = req.body
         //Creo una instancia del servicio LoginUsuarioService y utilizando UsuarioRepository como dependencia.
         const loginService = new LoginUsuarioService(UsuarioRepository);
         const token = await loginService.ejecutar(usuario, password, email)

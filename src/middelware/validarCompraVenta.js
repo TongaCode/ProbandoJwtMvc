@@ -1,7 +1,7 @@
 function validarCompraVenta(req, res, next) {
     const { monto } = req.body;
     const error = [];
-    
+
     //Validar monto
     if (typeof monto != 'number' || isNaN(monto)) error.push(`Debe ingresar un numero valido, no '${monto}'`);
 
