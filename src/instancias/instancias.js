@@ -1,0 +1,62 @@
+const UsuarioRepository = require('../repositories/UsuarioRepository');
+const container = require('../container/container');  // Importo el contenedor
+const CrearUsuarioService = require('../service/CrearUsuarioService');
+const CrearUsuarioController = require('../controllers/CrearUsuarioController');
+const BuscarUsuarioController = require('../controllers/BuscarUsuarioController');
+const BuscarUsuarioService = require('../service/BuscarUsuarioService');
+const LoginUsuarioService = require('../service/LoginUsuarioService');
+const LoginUsuarioController = require('../controllers/LoginUsuarioController');
+const ProtectedService = require('../service/ProtectedService');
+const ProtectedController = require('../controllers/ProtectedController');
+const TransferirService = require('../service/TransferirService');
+const TransferirUsuarioController = require('../controllers/TransferirUsuarioController');
+const CompraVentaDolarService = require('../service/CompraVentaDolarService');
+const CompraDolarController = require('../controllers/CompraDolarController');
+const VenderDolarController = require('../controllers/VenderDolarController');
+const ExtraccionDepositoService = require('../service/ExtracccionDepositoService');
+const ExtraccionController = require('../controllers/ExtraccionController');
+const DepositoController = require('../controllers/DepositoController');
+const LogoutController = require('../controllers/LogoutController');
+
+// Instancio los servicios y controladores
+const usuarioRepository = new UsuarioRepository();
+const crearUsuarioService = new CrearUsuarioService(usuarioRepository);
+const crearUsuarioController = new CrearUsuarioController(crearUsuarioService);
+const buscarUsuarioService = new BuscarUsuarioService(usuarioRepository);
+const buscarUsuarioController = new BuscarUsuarioController(buscarUsuarioService);
+const loginUsuarioService = new LoginUsuarioService(usuarioRepository); 
+const loginUsuarioController = new LoginUsuarioController(loginUsuarioService);
+const protectedService = new ProtectedService(usuarioRepository);
+const protectedController = new ProtectedController(protectedService);
+const transferirService = new TransferirService(usuarioRepository);
+const transferirUsuarioController = new TransferirUsuarioController(transferirService);
+const compraDolarService = new CompraVentaDolarService(usuarioRepository, 'compra');
+const compraDolarController = new CompraDolarController(compraDolarService);
+const venderDolarService = new CompraVentaDolarService(usuarioRepository, 'venta');
+const venderDolarController = new VenderDolarController(venderDolarService);
+const extraccionService = new ExtraccionDepositoService(usuarioRepository, 'extraccion');
+const extraccionController = new ExtraccionController(extraccionService);
+const depositoService = new ExtraccionDepositoService(usuarioRepository, 'deposito');
+const depositoController = new DepositoController(depositoService);
+const logoutController = new LogoutController();
+
+// Registro los servicios en el contenedor
+container.register('usuarioRepository', usuarioRepository);
+container.register('crearUsuarioService', crearUsuarioService);
+container.register('crearUsuarioController', crearUsuarioController);
+container.register('buscarUsuarioService', buscarUsuarioService);
+container.register('buscarUsuarioController', buscarUsuarioController);
+container.register('loginUsuarioService', loginUsuarioService);
+container.register('loginUsuarioController', loginUsuarioController);
+container.register('protectedService', protectedService);
+container.register('protectedController', protectedController);
+container.register('transferirService', transferirService);
+container.register('transferirUsuarioController', transferirUsuarioController);
+container.register('compraDolarService', compraDolarService);
+container.register('compraDolarController', compraDolarController);
+container.register('venderDolarService', venderDolarService);
+container.register('venderDolarController', venderDolarController );
+container.register('extraccionService', extraccionService);
+container.register('extraccionController', extraccionController);
+container.register('depositoController', depositoController);
+container.register('logoutController', logoutController);

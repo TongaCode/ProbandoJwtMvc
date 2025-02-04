@@ -6,7 +6,7 @@ class CompraVentaDolarService extends OperacionesService {
         super(UsuarioRepository, { operacion });
         this.operacion = operacion;
     };
-
+    
     async ejecutar(email, monto) {
         //LLamo al repository
         const user = await this.UsuarioRepository.findByEmail(email);

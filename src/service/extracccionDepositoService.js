@@ -8,7 +8,7 @@ class ExtraccionDepositoService extends OperacionesService {
     };
 
     async ejecutar(email, moneda, monto) {
-        //Llamo al repository
+        //Llamo al repository para buscar el usuario
         const user = await this.UsuarioRepository.findByEmail(email);
 
         switch (this.operacion) {

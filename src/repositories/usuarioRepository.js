@@ -10,7 +10,7 @@ class UsuarioRepository {
 
             return user;
         } catch (error) {
-            throw new Error(`Error al buscar usuario: ${email}, Detalles ${error.message}`);
+            throw new Error(`Error al buscar usuario: ${email}, Detalles: ${error.message}`);
         }
     };
 
@@ -47,4 +47,4 @@ class UsuarioRepository {
     };
 };
 
-module.exports = new UsuarioRepository();
+module.exports =  UsuarioRepository;

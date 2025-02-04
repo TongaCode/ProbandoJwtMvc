@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const connectDB = require('./confing/mongo');
+require('./src/instancias/instancias');//En este archivo registro los servicios antes de utilizarlos, debe estar antes del router.
 const router = require('./src/routers/index.router');
 const cookieParser = require('cookie-parser');
 
