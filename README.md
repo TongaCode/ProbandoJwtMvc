@@ -86,17 +86,17 @@ Para proteger los datos de los usuarios y el sistema, implementé:
 Toda la información de usuarios, saldos, movimientos y operaciones se guarda en una base de datos MongoDB, utilizando Mongoose como ODM para definir esquemas, validar datos y simplificar operaciones con la base.
 
 ✨ Funcionalidades implementadas
-Funcionalidad	Descripción
-✅ Alta de usuarios	Registro de nuevos usuarios con validación de datos
-🔁 Transferencias entre cuentas usando número de cuenta único
-💵 Compra de dólares	Compra de dólares según cotización
-💸 Venta de dólares	Venta de dólares con actualización de saldo en pesos
-💳 Depósitos	Aumento de saldo en cuenta en pesos
-🏧 Extracciones	Reducción de saldo en cuenta
-✏️ Modificación de usuario	Cambios en los datos del usuario
-❌ Baja de usuario	Eliminación lógica o total de la cuenta
-🔐 Login y Logout	Inicio y cierre de sesión con token
-🔒 Rutas protegidas	Acceso solo con token válido
+Funcionalidad	                                       Descripción
+✅ Alta de usuarios	                 Registro de nuevos usuarios con validación de datos
+🔁 Transferencias                    Entre cuentas usando número de cuenta único
+💵 Compra de dólares	               Compra de dólares según cotización
+💸 Venta de dólares	                 Venta de dólares con actualización de saldo en pesos
+💳 Depósitos	                       Aumento de saldo en cuenta en pesos
+🏧 Extracciones	                     Reducción de saldo en cuenta
+✏️ Modificación de usuario	         Cambios en los datos del usuario
+❌ Baja de usuario	                 Eliminación lógica o total de la cuenta
+🔐 Login y Logout	Inicio             Login y cierre de sesión con token
+🔒 Rutas protegidas	                 Acceso solo con token válido
 ```
 ⚙️ Cómo levantar el proyecto
 
