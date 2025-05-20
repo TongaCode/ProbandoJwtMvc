@@ -19,6 +19,22 @@ Mi objetivo fue aprender y aplicar conceptos reales de desarrollo backend, repli
 Además, quise lograr una estructura mantenible y extensible para futuros módulos.
 
 ---
+🧠 Tecnologías y herramientas utilizadas
+Node.js
+
+Express
+
+MongoDB + Mongoose
+
+JSON Web Tokens (JWT)
+
+Bcrypt
+
+Arquitectura en capas
+
+Patrón de inyección de dependencias (propio)
+
+Middlewares personalizados
 
 ## 🧱 Estructura del proyecto
 ```
@@ -41,6 +57,7 @@ Otros archivos importantes:
 📄 app.js # Punto de entrada de la app
 📄 package.json # Configuración del proyecto
 ```
+
 ---
 
 ## 🧠 Inyección de dependencias manual
@@ -48,7 +65,7 @@ Otros archivos importantes:
 Decidí no usar ningún framework externo como `Inversify` para profundizar y comprender mejor la inyeccion de dependencias, construí mi propio **contenedor de dependencias** para registrar e inyectar servicios y controladores.
 
 Esto me permitió desacoplar las capas y mantener el código flexible y fácil de testear.
-
+```
 js
 // Registro
 container.register('crearUsuarioService', crearUsuarioService);
@@ -80,7 +97,7 @@ Funcionalidad	Descripción
 ❌ Baja de usuario	Eliminación lógica o total de la cuenta
 🔐 Login y Logout	Inicio y cierre de sesión con token
 🔒 Rutas protegidas	Acceso solo con token válido
-
+```
 ⚙️ Cómo levantar el proyecto
 
 Cloná el repositorio:
