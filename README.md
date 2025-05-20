@@ -21,7 +21,7 @@ Además, quise lograr una estructura mantenible y extensible para futuros módul
 ---
 
 ## 🧱 Estructura del proyecto
-
+```
 📦 src
 ├── 📁 container # Contenedor personalizado de dependencias
 ├── 📁 controllers # Manejan la lógica de entrada (HTTP)
@@ -40,7 +40,7 @@ Otros archivos importantes:
 📄 .env.example # Ejemplo para compartir config
 📄 app.js # Punto de entrada de la app
 📄 package.json # Configuración del proyecto
-
+```
 ---
 
 ## 🧠 Inyección de dependencias manual
